@@ -1,6 +1,6 @@
 window.addEventListener('load',iniciar);
 
-//registro de los listeners del DnD y el input
+//registro de los listeners del DnD, el input y el boton reiniciar
 function iniciar() {
     var zona = document.getElementById('zonaArrastre');
     zona.addEventListener('drop',manejadorDrop);
@@ -9,20 +9,18 @@ function iniciar() {
     zona.addEventListener('dragover',manejadorDragOver);
     var input = document.getElementById('inputArchivos');
     input.addEventListener('input',manejadorInputArchivos);
+    var reiniciar = document.getElementById('reiniciar');
+    reiniciar.addEventListener('click',manejadorBotonReiniciar);
 }
 
 //implementaciones de los listeners del DnD
 function manejadorDrop(event) {
     event.preventDefault();
     event.stopPropagation();
-    document.getElementById('zonaArrastre').classList.remove('is-primary');
-    var listaArchivos = document.getElementById('listaArchivos');
-    //encontrar el archivo
+    document.getElementById('zonaArrastre').classList.remove('is-primary');    
+
     if (event.dataTransfer.files.length > 0) {
-        for (var i = 0; i < event.dataTransfer.files.length; i++) {
-            var nuevoArchivo = generarBox(event.dataTransfer.files[i]);
-            listaArchivos.appendChild(nuevoArchivo);
-        }
+        mostrarInfoDeArchivos(event.dataTransfer.files);
     }
     else {
         alert("Tiene que traer un archivo de su computadora");
@@ -51,11 +49,29 @@ function manejadorDragOver(event) {
     console.log("dragOver");
 }
 
-//implementacion listener del input de archivos
-function manejadorInputArchivos() {
-    console.log("se eejcuto el input de archivo");
+//implementacion del listener del boton reiniciar
+function manejadorBotonReiniciar() {
+    var listaArchivos = document.getElementById('listaArchivos');
+    listaArchivos.querySelectorAll('*').forEach(n => n.remove());
 }
 
+//implementacion listener del input de archivos
+function manejadorInputArchivos() {    
+    var inputArchivos = document.getElementById('inputArchivos');
+    if(inputArchivos.files.length > 0 ) {
+        mostrarInfoDeArchivos(inputArchivos.files);
+    }
+}
+
+//funcion que recibe una lista de archivos, los filtra y genera los elementos visuales con su informacion
+function mostrarInfoDeArchivos(archivos) {
+    //if (file.type contains "image" or contains "pdf" ) alert("no son soportados")
+    var listaInfoDeArchivos = document.getElementById('listaArchivos');
+    for (var i = 0; i < archivos.length; i++) {
+        var nuevoRecuadroInfoArchivo = generarBox(archivos[i]);
+        listaInfoDeArchivos.appendChild(nuevoRecuadroInfoArchivo);
+    }
+}
 
 //funcion auxiliar que genera un elemento grafico con la info del archivo
 function generarBox(archivo) {

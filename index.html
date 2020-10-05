@@ -33,28 +33,22 @@
                                     <span>Github</span>
                                 </a>
                             </div>
-                            <div id="zonaArrastre" class="column">
-                                <div class="notification is-dark has-text-centered">
+                            <div class="column">
+                                <div id="zonaArrastre" class="notification is-dark has-text-centered fran">
                                     <h3 class="has-text-light">ARRASTRE AQUI</h3>
                                 </div>
-                            <div class="columns">
-                                <div class="column">
-                                <label class="file-label">
-                                    <input class="file-input" type="file" id="inputArchivos">
-                                    <span class="button is-primary is-medium">
-                                        <span class="file-icon">
-                                            <i class="fas fa-upload"></i>
+                                <div class="file is-centered is-info is-medium">
+                                    <label class="file-label">
+                                        <input class="file-input" type="file" id="inputArchivos" multiple>
+                                        <span class="file-cta">
+                                            <span class="file-icon">
+                                                <i class="fas fa-upload"></i>
+                                            </span>
+                                            <span class="file-label">Subir</span>
                                         </span>
-                                        <span class="file-label">
-                                            Subir Archivos
-                                        </span>
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="column">
-                                <a href="#" class="button is-medium is-danger">Reiniciar</a>
-                            </div>
-                            </div>
+                                    </label>                                       
+                                    <button id="reiniciar" class="button is-medium is-danger">Reiniciar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,9 +77,9 @@
                     </aside>
                 </div>
                 <div class="column is-9">
-                    <div id="listaArchivos" class="content is-medium">
+                    <div class="content is-medium">
                         <h3 class="title is-3">Lista Archivos ¯\_(ツ)_/¯</h3>
-
+                        <div id="listaArchivos"></div>
                     </div>
                 </div>
             </div>
