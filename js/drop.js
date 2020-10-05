@@ -1,12 +1,14 @@
 window.addEventListener('load',iniciar);
 
-//registro de los listeners del DnD
+//registro de los listeners del DnD y el input
 function iniciar() {
     var zona = document.getElementById('zonaArrastre');
     zona.addEventListener('drop',manejadorDrop);
     zona.addEventListener('dragenter',manejadodrDragEnter);
     zona.addEventListener('dragleave',manejadorDragLeave);
     zona.addEventListener('dragover',manejadorDragOver);
+    var input = document.getElementById('inputArchivos');
+    input.addEventListener('input',manejadorInputArchivos);
 }
 
 //implementaciones de los listeners del DnD
@@ -49,7 +51,13 @@ function manejadorDragOver(event) {
     console.log("dragOver");
 }
 
-//funcion que genera un elemento grafico con la info del archivo
+//implementacion listener del input de archivos
+function manejadorInputArchivos() {
+    console.log("se eejcuto el input de archivo");
+}
+
+
+//funcion auxiliar que genera un elemento grafico con la info del archivo
 function generarBox(archivo) {
     var titulo = document.createElement("h4");
     titulo.classList.add("title","is-3");
