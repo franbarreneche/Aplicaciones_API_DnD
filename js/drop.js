@@ -80,7 +80,7 @@ function formatosTextoAceptados() {
 }
 
 function formatosImagenAceptados() {
-    return ["jpg","png","gif"];
+    return ["jpg","jpeg","png","gif"];
 }
 
 function formatosAdicionalesAceptados() {
