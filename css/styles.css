@@ -57,3 +57,14 @@ background: linear-gradient(to top right, #524ad0 10%, #D099FA);
 .fran {
   min-height: 250px;
 }
+
+.imagen150 {
+  width: 150px;
+}
+
+pre code {
+  background-color: #eee;
+  border: 1px solid #999;
+  display: block;
+  padding: 20px;
+}
