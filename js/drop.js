@@ -11,6 +11,8 @@ function iniciar() {
     input.addEventListener('input',manejadorInputArchivos);
     var reiniciar = document.getElementById('reiniciar');
     reiniciar.addEventListener('click',manejadorBotonReiniciar);
+    window.addEventListener('dragover',prevenirComportamientoDefault);
+    window.addEventListener('drop',prevenirComportamientoDefault);
 }
 
 //implementaciones de los listeners del DnD
@@ -44,6 +46,11 @@ function manejadorDragOver(event) {
     document.getElementById('zonaArrastre').classList.add('is-primary');
 }
 
+//implementacion del listener para prevenir que se abran los archivos en otra pestaña
+function prevenirComportamientoDefault(event) {
+    event.preventDefault();
+}
+
 //implementacion del listener del boton reiniciar
 function manejadorBotonReiniciar() {
     var listaArchivos = document.getElementById('listaArchivos');
@@ -58,14 +65,41 @@ function manejadorInputArchivos() {
     }
 }
 
+//implementacion listener de la cruz que aparece en el extremo superior derecho del cuadro de info de cada archivo
+function eliminarBox(event) {    
+    event.target.parentNode.parentNode.remove();
+}
+
+//funcion auxiliar que retorna los formatos aceptados
+function formatosAceptados() {
+    return formatosTextoAceptados().concat(formatosImagenAceptados(),formatosAdicionalesAceptados());    
+}
+
+function formatosTextoAceptados() {
+    return ["txt","json","html","xml"];
+}
+
+function formatosImagenAceptados() {
+    return ["jpg","png","gif"];
+}
+
+function formatosAdicionalesAceptados() {
+    return ["docx","xlsx","pptx","pdf"];
+}
+
+//funcion auxiliar que retorna la extension del archivo
+function getExt(nombre){
+    return nombre.split('.').pop();
+}
+
 //funcion que recibe una lista de archivos, los filtra y genera los elementos visuales con su informacion
 function mostrarInfoDeArchivos(archivos) {
-    var archivosPermitidos = ["txt","json","html","xml","jpg","png","gif","docx","xlsx","pptx","pdf"];
+    var archivosPermitidos = formatosAceptados();
     var listaInfoDeArchivos = document.getElementById('listaArchivos');
     for (var i = 0; i < archivos.length; i++) {
         var archivo = archivos[i];
         var extension = getExt(archivo.name);
-        if(archivosPermitidos.includes(extension[0])) {
+        if(archivosPermitidos.includes(extension)) {
             var nuevoRecuadroInfoArchivo = generarBox2(archivo,extension);
             listaInfoDeArchivos.appendChild(nuevoRecuadroInfoArchivo);
         }
@@ -74,10 +108,6 @@ function mostrarInfoDeArchivos(archivos) {
 }
 
 
-//listener que eliminar los elementos graficos con la info de los archivos
-function eliminarBox(event) {    
-    event.target.parentNode.parentNode.remove();
-}
 
 //funcion auxiliar que genera un elemento grafico con la info del archivo
 function generarBox2(archivo,extension) {
@@ -98,7 +128,6 @@ function generarBox2(archivo,extension) {
     listaDatos.appendChild(fechaModificacion);
 
     var boton = document.createElement("button");
-    //boton.classList.add("button","is-danger","is-small");
     boton.classList.add("delete");
     boton.innerHTML = "Eliminar";
     boton.addEventListener('click',eliminarBox);
@@ -108,31 +137,31 @@ function generarBox2(archivo,extension) {
     contenido.appendChild(titulo);
     contenido.appendChild(listaDatos);
     //si el archivo es de texto, entonces mostramos sus primeras 2 lineas
-    if(archivo.type.includes('text') || archivo.type.includes('json')) {
+    if(formatosTextoAceptados().includes(extension)) {
         var fr = new FileReader();
         var texto = document.createElement('code');
         fr.onload=function() {            
-            texto.innerHTML = fr.result.substring(0,150) + "...";            
+            texto.innerHTML = fr.result.replaceAll('<','&lt').replace('>','&gt').substring(0,180) + "...";            
         }
         fr.readAsText(archivo);         
         contenido.appendChild(texto);
     }
     
-
     var contenidoMedia = document.createElement("div");
     contenidoMedia.classList.add("media-content");
     contenidoMedia.appendChild(contenido);
 
     var imagen = document.createElement("img");
-    var origen = "img/placeholder.png";
-    if(archivo.type.includes('image')){
+    imagen.classList.add("imagen150");
+    var origen = "";
+    if(formatosImagenAceptados().includes(extension)){
         origen = URL.createObjectURL(archivo);
     }else origen = "img/"+extension+".png";
     imagen.src = origen;
     imagen.alt ="Alternativo";
 
     var figure = document.createElement("figure");
-    figure.classList.add("image","imagen150");
+    figure.classList.add("image");
     figure.appendChild(imagen);
 
     var media = document.createElement("div");
@@ -149,9 +178,5 @@ function generarBox2(archivo,extension) {
     return div;
 }
 
-//funcion auxiliar que retorna la extension del archivo
-function getExt(path){
-    return (path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').slice(-1): 'null';
-}
 
 

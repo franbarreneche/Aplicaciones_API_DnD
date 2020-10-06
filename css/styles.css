@@ -59,7 +59,8 @@ background: linear-gradient(to top right, #524ad0 10%, #D099FA);
 }
 
 .imagen150 {
-  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
 }
 
 pre code {
